@@ -38,6 +38,7 @@ func TestCreateLevels(t *testing.T) {
 		}
 	}
 }
+
 func TestCalculate(t *testing.T) {
 	t.Run("should return 29000 with status 200", func(t *testing.T) {
 		body, err := json.Marshal(handler.RequestCalculation{
@@ -165,6 +166,24 @@ func TestValidateWht(t *testing.T) {
 
 		if !reflect.DeepEqual(got, -1.0) {
 			t.Errorf("expected %v but got %v", -1.0, got)
+		}
+	})
+}
+
+func TestDonationValidate(t *testing.T) {
+	t.Run("should return 100000", func(t *testing.T) {
+		request := &handler.RequestCalculation{
+			TotalIncome: 500000.0,
+			Wht:         0.0,
+			Allowances: []handler.AllowancesArr{
+				{AllowanceType: "donation", Amount: 150000.0},
+			},
+		}
+
+		DonationValidate(request)
+
+		if request.Allowances[0].Amount != 100000.0 {
+			t.Errorf("expected %f, but got %f", 100000.0, request.Allowances[0].Amount)
 		}
 	})
 }
