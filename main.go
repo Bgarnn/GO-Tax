@@ -47,6 +47,9 @@ func main() {
 	g.POST("/deductions/personal", func(c echo.Context) error {
 		return database.UpdatePersonal(c, data)
 	})
+	g.POST("/deductions/k-receipt", func(c echo.Context) error {
+		return database.UpdateMaxKReceipt(c, data)
+	})
 
 	go func() {
 		if err := e.Start(":" + os.Getenv("PORT")); err != nil && err != http.ErrServerClosed {
