@@ -36,6 +36,10 @@ func Calculate(c echo.Context, data database.DataStruct) error {
 	if err := c.Bind(&request); err != nil {
 		return err
 	}
+	request.Wht = ValidateWht(request.Wht, request.TotalIncome)
+	if request.Wht == -1 {
+		return c.JSON(http.StatusBadRequest, Err{Message: "Invalid wht"})
+	}
 	taxableIncome, err := AllowanceCalculate(data, request)
 	if err != nil {
 		return err
@@ -97,4 +101,11 @@ func GetTaxLevel(taxableIncome float64, levels []Level) int {
 		}
 	}
 	return -1
+}
+
+func ValidateWht(amount, totalIncome float64) float64 {
+	if amount > totalIncome || amount < 0 {
+		return -1
+	}
+	return amount
 }

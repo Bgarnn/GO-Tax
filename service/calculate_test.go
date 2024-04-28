@@ -38,7 +38,6 @@ func TestCreateLevels(t *testing.T) {
 		}
 	}
 }
-
 func TestCalculate(t *testing.T) {
 	t.Run("should return 29000 with status 200", func(t *testing.T) {
 		body, err := json.Marshal(handler.RequestCalculation{
@@ -146,4 +145,26 @@ func TestGetTaxLevel(t *testing.T) {
 		}
 	})
 
+}
+
+func TestValidateWht(t *testing.T) {
+	t.Run("should return amount", func(t *testing.T) {
+		amount, totalIncome := 30000.0, 35000.0
+		want := amount
+
+		got := ValidateWht(amount, totalIncome)
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("expected %v but got %v", want, got)
+		}
+	})
+	t.Run("should return -1", func(t *testing.T) {
+		amount, totalIncome := 35000.0, 30000.0
+
+		got := ValidateWht(amount, totalIncome)
+
+		if !reflect.DeepEqual(got, -1.0) {
+			t.Errorf("expected %v but got %v", -1.0, got)
+		}
+	})
 }
