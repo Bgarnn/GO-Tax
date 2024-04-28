@@ -16,17 +16,29 @@ import (
 )
 
 func main() {
+	var err error
 	data := database.DataStruct{
 		PersonalAllowance: 60000.0,
 		MaxKReceipt:       50000.0,
 	}
+	database.Init()
 
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
 	e.POST("/tax/calculations", func(c echo.Context) error {
+		data, err = UpdateData(data)
+		if err != nil {
+			return err
+		}
 		return service.Calculate(c, data)
+	})
+
+	g := e.Group("/admin")
+	g.Use(middleware.BasicAuth(AuthMiddleware))
+	g.POST("/deductions/personal", func(c echo.Context) error {
+		return database.UpdatePersonal(c, data)
 	})
 
 	go func() {
@@ -54,4 +66,13 @@ func AuthMiddleware(username, password string, c echo.Context) (bool, error) {
 		return true, nil
 	}
 	return false, nil
+}
+
+func UpdateData(data database.DataStruct) (database.DataStruct, error) {
+	var err error
+	data.PersonalAllowance, err = database.GetPersonal(database.DB)
+	if err != nil {
+		return data, fmt.Errorf("GetPersonal error: %v", err)
+	}
+	return data, nil
 }
