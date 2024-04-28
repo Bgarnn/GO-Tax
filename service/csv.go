@@ -16,6 +16,7 @@ type Err struct {
 }
 
 func Csv(c echo.Context, dt database.DataStruct) error {
+	var response []handler.ResponseCSV
 	file, err := c.FormFile("taxFile")
 	if err != nil {
 		return c.JSON(http.StatusNotFound, Err{Message: "taxFile(FormFile) error"})
@@ -25,15 +26,11 @@ func Csv(c echo.Context, dt database.DataStruct) error {
 		return c.JSON(http.StatusInternalServerError, Err{Message: "taxFile(fileOpen) error"})
 	}
 	defer src.Close()
-
 	reader := csv.NewReader(src)
 	data, err := reader.ReadAll()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, Err{Message: "taxFile(ReadAll) error"})
 	}
-
-	var response []handler.ResponseCSV
-
 	for i, record := range data {
 		if i == 0 {
 			continue
@@ -46,7 +43,6 @@ func Csv(c echo.Context, dt database.DataStruct) error {
 		taxAmount, _ := TaxLevelCalculate(taxableIncome)
 		var taxRefund float64
 		taxRefund, taxAmount = WhtCalculate(wht, taxAmount)
-
 		response = append(response, handler.ResponseCSV{TotalIncome: totalIncome, Tax: taxAmount, TaxRefund: taxRefund})
 	}
 	return c.JSON(http.StatusOK, response)

@@ -63,7 +63,7 @@
   - **หากต้องมีการใช้คำสั่งอื่น ๆ เพื่อทำให้โปรแกรมทำงานได้ จะไม่นับคะแนนหรือถูกหักคะแนน**
   - การตรวจจะทำการ export `env` ไว้ล่วงหน้าก่อนรัน ดังนี้
 	- `export PORT=8080`
-	- `export DATABASE_URL={REPLACE_ME}`
+	- `export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/ktaxes?sslmode=disable"`
 	- `export ADMIN_USERNAME=adminTax`
 	- `export ADMIN_PASSWORD=admin!`
 - port ของ api จะต้องเป็น 8080

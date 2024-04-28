@@ -79,10 +79,8 @@ func TaxLevelCalculate(taxableIncome float64) (float64, []handler.TaxLevelArr) {
 	for i := levelOfTax; i >= 0; i-- {
 		totalIncomeThisLevel := min(taxableIncome, taxLevelDetail[i].MaxAmount) - taxLevelDetail[i].MinAmount + 1
 		taxResultThisLevel := totalIncomeThisLevel * taxLevelDetail[i].TaxRatePercentage
-
 		newTaxLevel := handler.TaxLevelArr{Level: taxLevelDetail[i].LevelString, Tax: taxResultThisLevel}
 		taxLevelsArr = append([]handler.TaxLevelArr{newTaxLevel}, taxLevelsArr...)
-
 		taxResultTotal += taxResultThisLevel
 		taxableIncome -= totalIncomeThisLevel
 	}
