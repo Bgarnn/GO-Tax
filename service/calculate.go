@@ -44,10 +44,10 @@ func Calculate(c echo.Context, data database.DataStruct) error {
 	if err != nil {
 		return err
 	}
-	taxAmount, _ := TaxLevelCalculate(taxableIncome)
+	taxAmount, taxLevels := TaxLevelCalculate(taxableIncome)
 	var taxRefund float64
 	taxRefund, taxAmount = WhtCalculate(request.Wht, taxAmount)
-	response := handler.ResponseCalculation{TaxRefund: taxRefund, Tax: taxAmount}
+	response := handler.ResponseCalculation{TaxRefund: taxRefund, Tax: taxAmount, TaxLevel: taxLevels}
 	return c.JSON(http.StatusOK, response)
 }
 

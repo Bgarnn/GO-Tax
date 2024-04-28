@@ -14,7 +14,7 @@ type AllowancesArr struct {
 type ResponseCalculation struct {
 	TaxRefund float64       `json:"taxRefund,omitempty"`
 	Tax       float64       `json:"tax"`
-	TaxLevel  []TaxLevelArr `json:"taxLevel,omitempty"`
+	TaxLevel  []TaxLevelArr `json:"taxLevel"`
 }
 
 type TaxLevelArr struct {

@@ -66,7 +66,16 @@ func TestCalculate(t *testing.T) {
 		if res.Result().StatusCode != http.StatusOK {
 			t.Errorf("expected status %v but got status %v", http.StatusOK, res.Result().StatusCode)
 		}
-		want := handler.ResponseCalculation{Tax: 29000}
+		want := handler.ResponseCalculation{
+			Tax: 29000.0,
+			TaxLevel: []handler.TaxLevelArr{
+				{Level: "0 - 150,000", Tax: 0.00},
+				{Level: "150,001 - 500,000", Tax: 29000.00},
+				{Level: "500,001 - 1,000,000", Tax: 0.00},
+				{Level: "1,000,001 - 2,000,000", Tax: 0.00},
+				{Level: "2,000,001 ขึ้นไป", Tax: 0.00},
+			},
+		}
 		var got handler.ResponseCalculation
 		if err := json.Unmarshal(res.Body.Bytes(), &got); err != nil {
 			t.Errorf("Cannot unmarshal json: %v", err)
