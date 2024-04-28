@@ -64,6 +64,7 @@ func WhtCalculate(wht, taxAmount float64) (float64, float64) {
 
 func AllowanceCalculate(data database.DataStruct, request handler.RequestCalculation) (float64, error) {
 	var totalAllowanceAmount float64
+	DonationValidate(&request)
 	for _, a := range request.Allowances {
 		totalAllowanceAmount += a.Amount
 	}
@@ -108,4 +109,12 @@ func ValidateWht(amount, totalIncome float64) float64 {
 		return -1
 	}
 	return amount
+}
+
+func DonationValidate(request *handler.RequestCalculation) {
+	for i := range request.Allowances {
+		if request.Allowances[i].AllowanceType == "donation" && request.Allowances[i].Amount > 100000 {
+			request.Allowances[i].Amount = 100000
+		}
+	}
 }
