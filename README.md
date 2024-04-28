@@ -1,6 +1,15 @@
 # K-Tax โปรแกรมคำนวนภาษี
 
-K-Tax เป็น Application คำนวนภาษี ที่ให้ผู้ใช้งานสามารถคำนวนภาษีบุคคลธรรมดา ตามขั้นบันใดภาษี พร้อมกับคำนวนค่าลดหย่อน และภาษีที่ต้องได้รับคืน
+**คำสั่งสำหรับการ run program**
+
+docker compose up
+export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/ktaxes?sslmode=disable"
+export PORT=8080
+export ADMIN_USERNAME=adminTax
+export ADMIN_PASSWORD=admin!
+go run main.go
+
+**K-Tax เป็น Application คำนวนภาษี ที่ให้ผู้ใช้งานสามารถคำนวนภาษีบุคคลธรรมดา ตามขั้นบันใดภาษี พร้อมกับคำนวนค่าลดหย่อน และภาษีที่ต้องได้รับคืน**
 
 ## Getting Started
 
