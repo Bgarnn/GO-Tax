@@ -79,3 +79,23 @@ func UpdatePersonal(c echo.Context, data DataStruct) error {
 	response := map[string]float64{"personalDeduction": personalAllowance}
 	return c.JSON(http.StatusOK, response)
 }
+
+func GetMaxKReceipt(db *sql.DB) (float64, error) {
+	var maxKReceiptAllowance float64
+	err := db.QueryRow("SELECT maxKReceipt FROM allowance WHERE id = $1", 1).Scan(&maxKReceiptAllowance)
+	if err != nil {
+		return 0, fmt.Errorf("GetMaxKReceipt failed: %v", err)
+	}
+	maxKReceiptAllowance = ValidateMaxKReceipt(maxKReceiptAllowance)
+	return maxKReceiptAllowance, nil
+}
+
+func ValidateMaxKReceipt(amount float64) float64 {
+	if amount > 100000 {
+		return (100000)
+	} else if amount <= 0 {
+		return (1)
+	} else {
+		return (amount)
+	}
+}
