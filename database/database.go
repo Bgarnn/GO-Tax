@@ -99,3 +99,22 @@ func ValidateMaxKReceipt(amount float64) float64 {
 		return (amount)
 	}
 }
+
+func UpdateMaxKReceipt(c echo.Context, data DataStruct) error {
+	db := DB
+	var request handler.RequestDeduction
+	if err := c.Bind(&request); err != nil {
+		return c.JSON(http.StatusBadRequest, Err{Message: err.Error()})
+	}
+	maxKReceipt := ValidateMaxKReceipt(request.Amount)
+	data.MaxKReceipt = request.Amount
+	stmt, err := db.Prepare(`UPDATE allowance SET maxKReceipt = $1`)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, Err{Message: err.Error()})
+	}
+	if _, err := stmt.Exec(maxKReceipt); err != nil {
+		return c.JSON(http.StatusInternalServerError, Err{Message: err.Error()})
+	}
+	response := map[string]float64{"kReceipt": maxKReceipt}
+	return c.JSON(http.StatusOK, response)
+}
