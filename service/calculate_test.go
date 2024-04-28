@@ -196,3 +196,25 @@ func TestDonationValidate(t *testing.T) {
 		}
 	})
 }
+
+func TestKReceiptValidate(t *testing.T) {
+	t.Run("should return 100000", func(t *testing.T) {
+		request := &handler.RequestCalculation{
+			TotalIncome: 500000.0,
+			Wht:         0.0,
+			Allowances: []handler.AllowancesArr{
+				{AllowanceType: "k-receipt", Amount: 150000.0},
+			},
+		}
+		data := database.DataStruct{
+			PersonalAllowance: 60000.0,
+			MaxKReceipt:       50000.0,
+		}
+
+		KReceiptValidate(data, request)
+
+		if request.Allowances[0].Amount != data.MaxKReceipt {
+			t.Errorf("expected %f, but got %f", data.MaxKReceipt, request.Allowances[0].Amount)
+		}
+	})
+}

@@ -81,5 +81,9 @@ func UpdateData(data database.DataStruct) (database.DataStruct, error) {
 	if err != nil {
 		return data, fmt.Errorf("GetPersonal error: %v", err)
 	}
+	data.MaxKReceipt, err = database.GetMaxKReceipt(database.DB)
+	if err != nil {
+		return data, fmt.Errorf("GetMaxKReceipt error: %v", err)
+	}
 	return data, nil
 }

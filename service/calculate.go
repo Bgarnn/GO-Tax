@@ -61,6 +61,7 @@ func WhtCalculate(wht, taxAmount float64) (float64, float64) {
 func AllowanceCalculate(data database.DataStruct, request handler.RequestCalculation) (float64, error) {
 	var totalAllowanceAmount float64
 	DonationValidate(&request)
+	KReceiptValidate(data, &request)
 	for _, a := range request.Allowances {
 		totalAllowanceAmount += a.Amount
 	}
@@ -113,4 +114,14 @@ func DonationValidate(request *handler.RequestCalculation) {
 			request.Allowances[i].Amount = 100000
 		}
 	}
+}
+
+func KReceiptValidate(data database.DataStruct, request *handler.RequestCalculation) (float64, error) {
+	maxKReceipt := data.MaxKReceipt
+	for i := range request.Allowances {
+		if request.Allowances[i].AllowanceType == "k-receipt" && request.Allowances[i].Amount > maxKReceipt {
+			request.Allowances[i].Amount = maxKReceipt
+		}
+	}
+	return maxKReceipt, nil
 }
