@@ -9,10 +9,6 @@ import (
 	"github.com/labstack/echo"
 )
 
-type Err struct {
-	Message string `json:"message"`
-}
-
 type Level struct {
 	Level             int
 	LevelString       string

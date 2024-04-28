@@ -34,6 +34,13 @@ func main() {
 		}
 		return service.Calculate(c, data)
 	})
+	e.POST("/tax/calculations/upload-csv", func(c echo.Context) error {
+		data, err = UpdateData(data)
+		if err != nil {
+			return err
+		}
+		return service.Csv(c, data)
+	})
 
 	g := e.Group("/admin")
 	g.Use(middleware.BasicAuth(AuthMiddleware))
